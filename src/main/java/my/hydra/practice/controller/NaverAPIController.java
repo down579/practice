@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -41,23 +42,27 @@ public class NaverAPIController {
             con.setRequestProperty("X-Naver-Client-Id",NAVER_CLIENT_ID);
             con.setRequestProperty("X-Naver-Client-Secret",NAVER_CLIENT_SECRET);
 
-            int responseCode = con.getResponseCode();
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-
-            String inputLine = "";
-            StringBuffer response = new StringBuffer();
-
-            if(responseCode == 200) {
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                } in.close();
-
-            }
-            return response.toString();
+            return getString(con);
         }
         catch(Exception ex) {
             ex.printStackTrace();
         }
         return "FAILED";
+    }
+
+    private String getString(HttpURLConnection con) throws IOException {
+        int responseCode = con.getResponseCode();
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+        String inputLine = "";
+        StringBuffer response = new StringBuffer();
+
+        if(responseCode == 200) {
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            } in.close();
+
+        }
+        return response.toString();
     }
 }
