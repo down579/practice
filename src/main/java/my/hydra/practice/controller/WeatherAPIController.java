@@ -44,7 +44,7 @@ public class WeatherAPIController {
     }
 
     /**
-     * 날씨 초단기예보조
+     * 날씨 초단기예보조회
      * @param numOfRows
      * @param pageNo
      * @param baseDate
