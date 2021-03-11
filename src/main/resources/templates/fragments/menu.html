@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="fragment-nav">
+    <ul class="sidebar navbar-nav">
+        <li class="nav-item active">
+            <a class="nav-link" href="/main">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>주소록 조회</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="/member/address/new">
+                <i class="fas fa-fw fa-table"></i>
+                <span>주소록 등록</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/member/dupaddress">
+                <i class="fas fa-fw fa-table"></i>
+                <span>중복 주소록 조회</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/member/dupaddressDelete">
+                <i class="fas fa-fw fa-table"></i>
+                <span>중복 주소록 삭제</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/logout">
+                <i class="fas fa-fw fa-table"></i>
+                <span>로그아웃</span></a>
+        </li>
+    </ul>
+</div>
+</html>

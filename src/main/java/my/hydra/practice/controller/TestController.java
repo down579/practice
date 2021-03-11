@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class TestController {
 
+    @RequestMapping(method= RequestMethod.GET, value="/template")
+    public String template() {
+        return "practice-template";
+    }
     @RequestMapping(method = RequestMethod.GET, value = "/test")
     public String test() {
         return "test";

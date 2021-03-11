@@ -1,11 +1,209 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>thymeleaf 테스트</title>
+
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+
 </head>
-<body>
-테스트 입니다.
+
+<body id="page-top">
+
+<div th:replace="/fragments/header_title.html :: fragment-header_title"></div>
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <div th:replace="/fragments/menu.html :: fragment-nav"></div>
+
+    <div id="content-wrapper">
+
+        <div class="container-fluid">
+
+            <!-- DataTables Example -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fas fa-table"></i>
+                    주소록 조회</div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>주소록 번호</th>
+                                <th>이름</th>
+                                <th>전화번호</th>
+                                <th>이메일주소</th>
+                                <th>생성일자</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody id="addressList">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite"></div>
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                            <ul class="pagination" id="pageList">
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card-footer small text-muted"></div>
+            </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+        <div th:replace="/fragments/footer.html :: fragment-footer"></div>
+
+    </div>
+    <!-- /.content-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+<div th:replace="/fragments/script.html :: fragment-script"></div>
+<script type="text/javascript">
+    var currentMemberId = "[[${currentMemberId}]]";
+    $(document).ready(function(){
+
+        //listCall(1,10);
+
+    });
+
+    function listCall(page, pageSize) {
+        $('#addressList').empty();
+        $('#addressList').append('<tr>\n' +
+            '<td colspan="6">조회 중입니다.</td>\n' +
+            '</tr>');
+
+        $.ajax({
+            type : 'get',
+            contentType : 'application/json',
+            url : '/api/v1/members/' + currentMemberId + '/address?page=' + page + '&pageSize=' + pageSize,
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader("X-API-CLIENT-CODE","00000");
+                xhr.setRequestHeader("X-API-KEY","ADGQ9875GUEHQLDOEJIEYIOPEJGBQKIH");
+            },
+            success : function(result) {
+                if(result.resultCode == "0000") {
+                    appendList(result);
+                    pagination(result);
+                }
+                else {
+                    alert(result.resultMessage);
+                }
+            },
+            error : function (xhr, status, error) {
+                alert("오류가 발생하였습니다.");
+            }
+
+        });
+    }
+
+    function appendList(result) {
+
+        $('#addressList').empty();
+
+        var _addressList = $('#addressList');
+        var _list = result.address.content;
+        var _currentPage = result.address.pageable.pageNumber + 1;
+
+        for(var i = 0; i < _list.length; i++) {
+            _addressList.append("<tr>");
+            _addressList.append("<td>" + _list[i].addressNo + "</td>");
+            _addressList.append("<td>" + _list[i].name + "</td>");
+            _addressList.append("<td>" + _list[i].phoneNo + "</td>");
+            _addressList.append("<td>" + _list[i].email + "</td>");
+            _addressList.append("<td>" + _list[i].createDate + "</td>");
+            _addressList.append("<td><button onclick='addressDelete("+ _list[i].addressNo +","+ _currentPage +")'>삭제</button></td>");
+            _addressList.append("</tr>");
+        }
+
+    }
+
+    function pagination(result) {
+        var currentPage = result.address.pageable.pageNumber + 1;
+        var totalPages = result.address.totalPages;
+        var totalElements = result.address.totalElements;
+
+        // 페이징에 총 표시할 페이지 수는 6개
+        $('#dataTable_info').text("총 " + totalElements + "개의 데이터가 있습니다.");
+        var currentPageMod = currentPage % 6;
+        var visibleLastPage = currentPage + (6 - currentPageMod);
+
+        //현재 페이지가 6의 배수 일 때
+        if(currentPageMod == 0) {
+            visibleLastPage = currentPage;
+        }
+
+        var visibleFirstPage = visibleLastPage - 5;
+        var pageList = $('#pageList');
+        pageList.empty();
+        if(visibleLastPage > totalPages) {
+            visibleLastPage = totalPages;
+        }
+
+        if(visibleFirstPage != 1) {
+            pageList.append('<li class="paginate_button page-item previous" id="dataTable_previous">\n' +
+                '<a href="javascript:listCall('+ (visibleFirstPage - 1) +',10);" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>\n' +
+                '</li>');
+        }
+
+        for(var i = visibleFirstPage ; i <= visibleLastPage; i++) {
+            pageList.append('<li class="paginate_button page-item ' + ((currentPage === i) ? "active" : "") + '">\n' +
+                '<a href="javascript:listCall(' + i + ',10);" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">'+ i +'</a>\n' +
+                '</li>');
+        }
+
+        if(visibleLastPage != totalPages) {
+            pageList.append('<li class="paginate_button page-item next" id="dataTable_next">\n' +
+                '<a href="javascript:listCall('+ (visibleLastPage + 1) +',10);" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">Next</a>\n' +
+                '</li>');
+        }
+
+    }
+
+    function addressDelete(addressNo, currentPage) {
+        if(confirm("삭제하시겠습니까?")) {
+            $.ajax({
+                type: 'delete',
+                contentType: 'application/json',
+                url: '/api/v1/members/' + currentMemberId + '/address/' + addressNo,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-API-CLIENT-CODE", "00000");
+                    xhr.setRequestHeader("X-API-KEY", "ADGQ9875GUEHQLDOEJIEYIOPEJGBQKIH");
+                },
+                success: function (result) {
+                    alert(result.resultMessage);
+                    if (result.resultCode == "0000") {
+                        listCall(currentPage, 10);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("오류가 발생하였습니다.");
+                }
+
+            });
+        }
+    }
+</script>
+
 </body>
+
 </html>
