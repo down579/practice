@@ -26,12 +26,8 @@
                     <i class="fas fa-table"></i>
                     네이버 뉴스 조회</div>
                 검색어 : <input type="text" name="searchText" id="searchText" placeholder="이곳에 검색어를 입력해주세요" />
-                <select id="viewSize">
-                    <option value="10" selected="selected">10개씩 보기</option>
-                    <option value="20">20개씩 보기</option>
-                    <option value="30">30개씩 보기</option>
-                </select>
-                기사 검색 정렬순
+
+                기사 검색 정렬 선택
                 <select id="searchType">
                     <option value="date" selected="selected">날짜순</option>
                     <option value="sim">관련도순</option>
@@ -94,33 +90,40 @@
 </a>
 <div th:replace="/fragments/script.html :: fragment-script"></div>
 <script type="text/javascript">
-    var currentMemberId = "[[${currentMemberId}]]";
+    let offset = 1;
+    let pageSize = 10;
     $(document).ready(function(){
 
         //listCall(1,10);
 
     });
 
+    $(window).scroll(function() {
+        if($(window).scrollTop() + $(window).height() == $(document).height()) {
+            getNewsList();
+        }
+    });
+
     function listCall() {
+        offset = 1;
         if($('#searchText').val() == "") {
             alert("검색어를 입력해주세요.");
             $('#searchText').focus();
             return;
         }
         $('#articleList').empty();
-        $('#articleList').append('<tr>\n' +
-            '<td colspan="5">조회 중입니다.</td>\n' +
-            '</tr>');
+        getNewsList();
+    }
 
+    function getNewsList() {
         $.ajax({
             type : 'get',
             contentType : 'application/json',
-            url : '/naver/GetNews?offset=1&pageSize=' + $('#viewSize').val()
-                + '&searchText=' + $('#searchText').val() + "&sort=" + $('#searchType').val(),
+            url : '/naver/GetNews?offset=' +offset+ '&pageSize=' +pageSize+'&searchText=' + $('#searchText').val() + "&sort=" + $('#searchType').val(),
             success : function(result) {
                 appendList(JSON.parse(result));
             },
-            error : function (xhr, status, error) {
+            error : function () {
                 alert("오류가 발생하였습니다.");
             }
 
@@ -129,13 +132,12 @@
 
     function appendList(result) {
 
-        $('#articleList').empty();
+        //$('#articleList').empty();
 
         var _articleList = $('#articleList');
         var _list = result.items;
         $('#resultCount').text(result.total + "건 조회 되었습니다.");
         //var _currentPage = result.address.pageable.pageNumber + 1;
-
         for(var i = 0; i < _list.length; i++) {
             _articleList.append("<tr>");
             _articleList.append("<td>" + _list[i].title + "</td>");
@@ -144,6 +146,12 @@
             _articleList.append("<td>" + _list[i].description + "</td>");
             _articleList.append("<td>" + moment(_list[i].pubDate).format('YYYY-MM-DD HH:mm:ss') + "</td>");
             _articleList.append("</tr>");
+        }
+        if(_list.length == pageSize) {
+            offset++;
+        }
+        else {
+            alert("마지막 페이지 입니다.");
         }
 
     }
