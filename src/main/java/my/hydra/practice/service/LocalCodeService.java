@@ -1,6 +1,7 @@
 package my.hydra.practice.service;
 
 import lombok.RequiredArgsConstructor;
+import my.hydra.practice.models.LocalCoordinate;
 import my.hydra.practice.repository.LocalCodeRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class LocalCodeService {
         return localCodeRepository.GroupByLevel2(level1);
     }
 
-    public List<String> getLevel3Code(String level1, String level2) {
+    public List<LocalCoordinate> getLevel3Code(String level1, String level2) {
         return localCodeRepository.GroupBylevel3(level1, level2);
     }
 }

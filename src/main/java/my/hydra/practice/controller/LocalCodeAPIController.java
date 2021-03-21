@@ -1,6 +1,7 @@
 package my.hydra.practice.controller;
 
 import lombok.RequiredArgsConstructor;
+import my.hydra.practice.models.LocalCoordinate;
 import my.hydra.practice.service.LocalCodeService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,8 +25,8 @@ public class LocalCodeAPIController {
     }
 
     @GetMapping(value = "/local-code/level1/{level1}/level2/{level2}/level3")
-    public List<String> getLevel3Code(@PathVariable(name="level1") String level1,
-                                      @PathVariable(name="level2") String level2) {
+    public List<LocalCoordinate> getLevel3Code(@PathVariable(name="level1") String level1,
+                                               @PathVariable(name="level2") String level2) {
         return localCodeService.getLevel3Code(level1, level2);
     }
 }
