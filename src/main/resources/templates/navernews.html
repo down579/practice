@@ -119,7 +119,7 @@
         $.ajax({
             type : 'get',
             contentType : 'application/json',
-            url : '/naver/GetNews?offset=' +offset+ '&pageSize=' +pageSize+'&searchText=' + $('#searchText').val() + "&sort=" + $('#searchType').val(),
+            url : 'api/naver/GetNews?offset=' +offset+ '&pageSize=' +pageSize+'&searchText=' + $('#searchText').val() + "&sort=" + $('#searchType').val(),
             success : function(result) {
                 appendList(JSON.parse(result));
             },

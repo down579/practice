@@ -1,6 +1,5 @@
 package my.hydra.practice.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +12,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 @RestController
-@RequestMapping("/naver")
+@RequestMapping("/api/naver")
 public class NaverAPIController {
 
     private final String NEWS_API_URL = "https://openapi.naver.com/v1/search/news.json";

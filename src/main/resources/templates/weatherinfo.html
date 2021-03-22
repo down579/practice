@@ -25,6 +25,14 @@
             <select id="selLevel1">
                 <option selected="selected" value="">선택해 주세요.</option>
             </select>
+            구군 선택 :
+            <select id="selLevel2">
+                <option selected="selected" value="">선택해 주세요.</option>
+            </select>
+            동 선택 :
+            <select id="selLevel3">
+                <option selected="selected" value="">선택해 주세요.</option>
+            </select>
             <!-- DataTables Example -->
 
 
@@ -48,7 +56,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
        $.ajax({
-           url : "/local-code/level1",
+           url : "/api/local-code/level1",
            type : "get",
            contentType : "application/json",
            success : function(result) {
@@ -60,8 +68,63 @@
            error : function() {
                alert("error");
            }
-       })
+       });
+
+       $('#selLevel1').change(function(){
+          if($(this).val() != "") {
+              selLevel1Change();
+          }
+       });
+
+        $('#selLevel2').change(function(){
+            if($(this).val() != "") {
+                selLevel2Change();
+            }
+        });
+
     });
+    function selLevel1Change() {
+        $('#selLevel3').empty();
+        $('#selLevel2').empty();
+
+        $('#selLevel2, #selLevel3').append("<option value='' selected='selected'>선택해주세요</option>");
+
+        $.ajax({
+            url : "/api/local-code/level1/" + $('#selLevel1').val() + "/level2",
+            type : "get",
+            contentType : "application/json",
+            success : function(result) {
+                console.log(result);
+                for(var i = 0; i < result.length ; i++) {
+                    $('#selLevel2').append("<option value='" + result[i] + "'>" + result[i] + "</option>");
+                }
+            },
+            error : function() {
+                alert("error");
+            }
+        });
+    }
+
+    function selLevel2Change() {
+        $('#selLevel3').empty();
+
+        $('#selLevel3').append("<option value='' selected='selected'>선택해주세요</option>");
+
+        $.ajax({
+            url : "/api/local-code/level1/" + $('#selLevel1').val() + "/level2/" + $('#selLevel2').val() + "/level3",
+            type : "get",
+            contentType : "application/json",
+            success : function(result) {
+                console.log(result);
+                for(var i = 0; i < result.length ; i++) {
+                    $('#selLevel3').append("<option value='" + result[i].level3 + "' x='"+ result[i].x +"' y='" + result[i].y +"'>" + result[i].level3 + "</option>");
+                }
+            },
+            error : function() {
+                alert("error");
+            }
+        });
+    }
 </script>
 
 </body>

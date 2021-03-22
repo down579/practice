@@ -11,7 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 @RestController
-@RequestMapping("/weather")
+@RequestMapping("/api/weather")
 public class WeatherAPIController {
     private final String baseApiUrl = "http://apis.data.go.kr/1360000";
     private final String apiKey = "8NSiUwnrP48P0h9w%2F2SCHeaoHqu4cf5nw28kgmOjDDa73GKAKOZrz%2BPkFX84gVmCmbjH%2BhjzdgXPcoqCtLj4bQ%3D%3D";
