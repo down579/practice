@@ -14,25 +14,25 @@ import java.time.LocalDateTime;
 public class BoardCode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="BoardNo")
+    @Column(name="boardno")
     public int BoardNo;
 
-    @Column(name = "BoardTitle", nullable = false)
+    @Column(name = "boardtitle", nullable = false)
     public String BoardTitle;
 
-    @Column(name = "CreateDate", nullable = false)
+    @Column(name = "createdate", nullable = false)
     public LocalDateTime CreateDate;
 
-    @Column(name = "UpdateDate", nullable = false)
+    @Column(name = "updatedate", nullable = false)
     public LocalDateTime UpdateDate;
 
-    @Column(name="CreateMember", nullable = false)
+    @Column(name="createmember", nullable = false)
     public int CreateMember;
 
-    @Column(name="UpdateMember", nullable = false)
+    @Column(name="updatemember", nullable = false)
     public int UpdateMember;
 
-    @Column(name = "Remark", nullable = false)
+    @Column(name = "remark", nullable = false)
     public String Remark;
 
 

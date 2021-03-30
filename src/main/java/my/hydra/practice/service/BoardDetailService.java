@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import my.hydra.practice.domains.BoardDetail;
 import my.hydra.practice.domains.Member;
 import my.hydra.practice.models.ResponseCommon;
+import my.hydra.practice.models.board.SelectBoardNo;
 import my.hydra.practice.models.request.RequestPostBoardDetail;
 import my.hydra.practice.models.response.ResponsePostBoardDetail;
 import my.hydra.practice.repository.BoardCodeRepository;
@@ -25,7 +26,7 @@ public class BoardDetailService {
         Member registMember = memberRepository.findByMemberId(user.getUsername()).orElse(null);
         ResponseCommon responseCommon = new ResponseCommon();
         ResponsePostBoardDetail result = new ResponsePostBoardDetail();
-        int existBoard = 0;
+        SelectBoardNo existBoard = null;
         if(registMember == null) {
             responseCommon.setCode("0001");
             responseCommon.setMessage("회원 정보가 존재하지 않습니다.");
@@ -35,8 +36,8 @@ public class BoardDetailService {
             return result;
         }
         // 유효한 게시판 번호인지 확인하는 로직도 필요함
-        existBoard = boardCodeRepository.findBoardCodeByBoardNo(detail.getBoardNo());
-        if(existBoard == 0) {
+        existBoard = boardCodeRepository.findBoardNoByBoardNo(boardNo);
+        if(existBoard == null) {
             responseCommon.setCode("0004");
             responseCommon.setMessage("유효하지 않은 게시판입니다.");
             result.setResult(responseCommon);

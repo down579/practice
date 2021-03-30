@@ -8,5 +8,4 @@ import lombok.Setter;
 public class RequestPostBoardDetail {
     private String title;
     private String content;
-    private int boardNo;
 }

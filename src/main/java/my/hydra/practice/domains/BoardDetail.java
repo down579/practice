@@ -14,24 +14,24 @@ import java.time.LocalDateTime;
 public class BoardDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="No")
+    @Column(name="no")
     private long No;
 
-    @Column(name="BoardNo")
+    @Column(name="boardno")
     private int BoardNo;
 
-    @Column(name = "Title")
+    @Column(name = "title")
     private String Title;
 
-    @Column(name="Content")
+    @Column(name="content")
     private String Content;
 
-    @Column(name="CreateDate")
+    @Column(name="createdate")
     private LocalDateTime CreateDate;
 
-    @Column(name="UpdateDate")
+    @Column(name="updatedate")
     private LocalDateTime UpdateDate;
-    @JoinColumn(name="MemberCode")
+    @JoinColumn(name="membercode")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
     public BoardDetail(int boardNo, String title, String content) {

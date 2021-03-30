@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+
+</head>
+
+<body id="page-top">
+
+<div th:replace="/fragments/header_title.html :: fragment-header_title"></div>
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <div th:replace="/fragments/menu.html :: fragment-nav"></div>
+
+    <div id="content-wrapper">
+
+        <div class="container-fluid">
+            <form id="boardForm">
+            <!-- DataTables Example -->
+            제목 : <input id="title" name="title" type="text" /><br /><br />
+            내용 : <br />
+            <textarea cols="100" id="content" name="content" rows="20"></textarea>
+            <input id="btnRegist" name="btnRegist" type="button" value="등록" />
+            </form>
+
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+        <div th:replace="/fragments/footer.html :: fragment-footer"></div>
+
+    </div>
+    <!-- /.content-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+<div th:replace="/fragments/script.html :: fragment-script"></div>
+<script type="text/javascript">
+    var header = $("meta[name='_csrf_header']").attr('content');
+    var token = $("meta[name='_csrf']").attr('content');
+$(document).ready(function(){
+   $('#btnRegist').on("click",function(){
+        if($.trim($('#title').val()) == "") {
+            alert("제목을 입력해주세요.");
+            $('#title').focus();
+            return false;
+        }
+        if($.trim($('#content').val()) == "") {
+            alert("내용을 입력해주세요.");
+            $('#content').focus();
+            return false;
+        }
+
+        var requestObj = {
+            title : $('#title').val(),
+            content : $('#content').val()
+        };
+
+        $.ajax({
+            type : "post",
+            url : "/api/board/[[${boardNo}]]",
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            contentType : "application/json",
+            data : JSON.stringify(requestObj),
+            success : function(result) {
+                alert(result);
+                console.log(result);
+            },
+            error : function() {
+                alert("게시글 등록 중 오류가 발생하였습니다.");
+            }
+        })
+   });
+});
+</script>
+
+</body>
+
+</html>
