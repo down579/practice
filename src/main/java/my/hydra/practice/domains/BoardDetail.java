@@ -31,6 +31,8 @@ public class BoardDetail {
 
     @Column(name="updatedate")
     private LocalDateTime UpdateDate;
+    @Column(name="viewcount")
+    private int ViewCount;
     @JoinColumn(name="membercode")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;

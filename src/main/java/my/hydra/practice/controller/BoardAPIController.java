@@ -2,6 +2,7 @@ package my.hydra.practice.controller;
 
 import lombok.RequiredArgsConstructor;
 import my.hydra.practice.models.request.RequestPostBoardDetail;
+import my.hydra.practice.models.response.ResponseGetBoardDetailList;
 import my.hydra.practice.models.response.ResponsePostBoardDetail;
 import my.hydra.practice.service.BoardDetailService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,5 +21,11 @@ public class BoardAPIController {
                                                @PathVariable int boardNo)
     {
         return service.save(detail, user, boardNo);
+    }
+
+    @GetMapping("/{boardNo}")
+    public ResponseGetBoardDetailList getBoardList(@PathVariable int boardNo, int page, int pageSize)
+    {
+        return service.getBoardList(boardNo, page, pageSize);
     }
 }

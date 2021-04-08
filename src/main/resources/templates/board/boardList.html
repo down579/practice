@@ -21,6 +21,57 @@
         <div class="container-fluid">
 
             <!-- DataTables Example -->
+            <!-- DataTables Example -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fas fa-table"></i>
+                    게시판 조회</div>
+                검색어 : <input id="searchText" name="searchText" placeholder="이곳에 검색어를 입력해주세요" type="text" />
+
+                기사 검색 정렬 선택
+                <select id="searchType">
+                    <option selected="selected" value="date">날짜순</option>
+                    <option value="sim">관련도순</option>
+                </select>
+                <input id="goSearch" onclick="" type="button" value="조회" />
+                검색 결과 : <div id="resultCount">0건</div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table cellspacing="0" class="table table-bordered" id="dataTable" width="100%">
+                            <thead>
+                            <tr>
+                                <th>번호</th>
+                                <th>제목</th>
+                                <th>작성자</th>
+                                <th>등록 시간</th>
+                                <th>수정 시간</th>
+                            </tr>
+                            </thead>
+                            <tbody id="articleList">
+                            <tr>
+                                <td colspan="5">검색 조건 설정 후 조회 버튼을 클릭해주세요</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <div aria-live="polite" class="dataTables_info" id="dataTable_info" role="status"></div>
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                            <ul class="pagination" id="pageList">
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card-footer small text-muted"></div>
+            </div>
             <input id="btnRegist" name="title" type="button" value="등록하기" />
 
 
@@ -43,10 +94,29 @@
 </a>
 <div th:replace="/fragments/script.html :: fragment-script"></div>
 <script type="text/javascript">
+    let header = $("meta[name='_csrf_header']").attr('content');
+    let token = $("meta[name='_csrf']").attr('content');
+
 $(document).ready(function(){
    $('#btnRegist').on("click",function(){
       location.href="/board/" + "[[${boardNo}]]/regist";
    });
+
+    $.ajax({
+        type : "get",
+        url : "/api/board/[[${boardNo}]]?page=1&pageSize=10",
+        beforeSend : function(xhr) {
+            xhr.setRequestHeader(header, token);
+        },
+        contentType : "application/json",
+        success : function(result) {
+            alert(result);
+            console.log(result);
+        },
+        error : function() {
+            alert("게시글 등록 중 오류가 발생하였습니다.");
+        }
+    });
 });
 </script>
 
