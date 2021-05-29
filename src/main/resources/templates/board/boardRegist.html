@@ -45,8 +45,6 @@
 </a>
 <div th:replace="/fragments/script.html :: fragment-script"></div>
 <script type="text/javascript">
-    var header = $("meta[name='_csrf_header']").attr('content');
-    var token = $("meta[name='_csrf']").attr('content');
 $(document).ready(function(){
    $('#btnRegist').on("click",function(){
         if($.trim($('#title').val()) == "") {
@@ -65,23 +63,18 @@ $(document).ready(function(){
             content : $('#content').val()
         };
 
-        $.ajax({
-            type : "post",
-            url : "/api/board/[[${boardNo}]]",
-            beforeSend : function(xhr) {
-                xhr.setRequestHeader(header, token);
-            },
-            contentType : "application/json",
-            data : JSON.stringify(requestObj),
-            success : function(result) {
-                alert(result);
-                console.log(result);
-            },
-            error : function() {
-                alert("게시글 등록 중 오류가 발생하였습니다.");
-            }
-        });
+        ajaxRequest("post","board/[[${boardNo}]]",requestObj,registSuccess, registError);
+
    });
+   function registSuccess(result) {
+       alert(result.result.message);
+       if(result.result.code == "0000") {
+           location.href = "/board/[[${boardNo}]]/list";
+       }
+   }
+   function registError(error) {
+       alert("게시글 등록 중 오류가 발생하였습니다.");
+   }
 });
 </script>
 

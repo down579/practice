@@ -94,30 +94,40 @@
 </a>
 <div th:replace="/fragments/script.html :: fragment-script"></div>
 <script type="text/javascript">
-    let header = $("meta[name='_csrf_header']").attr('content');
-    let token = $("meta[name='_csrf']").attr('content');
 
 $(document).ready(function(){
    $('#btnRegist').on("click",function(){
       location.href="/board/" + "[[${boardNo}]]/regist";
    });
 
-    $.ajax({
-        type : "get",
-        url : "/api/board/[[${boardNo}]]?page=1&pageSize=10",
-        beforeSend : function(xhr) {
-            xhr.setRequestHeader(header, token);
-        },
-        contentType : "application/json",
-        success : function(result) {
-            alert(result);
-            console.log(result);
-        },
-        error : function() {
-            alert("게시글 등록 중 오류가 발생하였습니다.");
-        }
-    });
+   ajaxRequest("get","board/[[${boardNo}]]?page=1&pageSize=10",null,
+       successFunction,errorFunction);
 });
+function successFunction(result) {
+    if(result.result.code == "0000") {
+        var dataList = result.dataList.content;
+        $('#articleList').empty();
+        var appendHtml = "";
+        for(var i = 0; i < dataList.length; i++) {
+            appendHtml += "<tr>";
+            appendHtml += "   <td>" + dataList[i].no + "</td>";
+            appendHtml += "   <td><a href='/board/" + dataList[i].boardNo + "/detail/" + dataList[i].no + "'>"
+                + dataList[i].title + "</a></td>";
+            appendHtml += "   <td>" + dataList[i].memberId + "</td>";
+            appendHtml += "   <td>" + dataList[i].createDate + "</td>";
+            appendHtml += "   <td>" + dataList[i].updateDate + "</td>";
+            appendHtml += "</tr>";
+        }
+        $('#articleList').append(appendHtml);
+
+    }
+    else {
+        alert("조회 결과가 없습니다.");
+    }
+}
+function errorFunction(err) {
+    alert("게시글 조회 중 오류가 발생하였습니다.");
+}
 </script>
 
 </body>

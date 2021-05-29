@@ -2,6 +2,8 @@ package my.hydra.practice.controller;
 
 import lombok.RequiredArgsConstructor;
 import my.hydra.practice.models.request.RequestPostBoardDetail;
+import my.hydra.practice.models.response.ResponseDeleteBoardDetail;
+import my.hydra.practice.models.response.ResponseGetBoardDetail;
 import my.hydra.practice.models.response.ResponseGetBoardDetailList;
 import my.hydra.practice.models.response.ResponsePostBoardDetail;
 import my.hydra.practice.service.BoardDetailService;
@@ -27,5 +29,18 @@ public class BoardAPIController {
     public ResponseGetBoardDetailList getBoardList(@PathVariable int boardNo, int page, int pageSize)
     {
         return service.getBoardList(boardNo, page, pageSize);
+    }
+
+    @GetMapping("/{boardNo}/{no}")
+    public ResponseGetBoardDetail getBoardDetail(@PathVariable int boardNo, @PathVariable long no) {
+        return service.getBoardDetail(no);
+    }
+
+    @DeleteMapping("/{boardNo}/{no}")
+    public ResponseDeleteBoardDetail deleteBoardDetail(
+                                                       @PathVariable int boardNo,
+                                                       @PathVariable long no)
+    {
+        return service.boardDelete(boardNo, no);
     }
 }

@@ -19,5 +19,11 @@ public class BoardViewController {
         model.put("boardNo",boardNo);
         return "/board/boardList";
     }
+    @RequestMapping(value="/board/{boardNo}/detail/{no}", method = RequestMethod.GET)
+    public String showBoardDetail(@PathVariable int boardNo, @PathVariable long no, Map<String, Object> model) {
+        model.put("boardNo", boardNo);
+        model.put("no", no);
+        return "/board/boardDetail";
+    }
 
 }

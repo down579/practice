@@ -8,18 +8,24 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class SelectBoardList {
-    public String title;
-    public String memberId;
-    public int viewCount;
-    public LocalDateTime CreateDate;
-    public LocalDateTime UpdateDate;
+    private long no;
+    private int boardNo;
+    private String title;
+    private String memberId;
+    private int viewCount;
+    private LocalDateTime CreateDate;
+    private LocalDateTime UpdateDate;
+    private String content;
 
     public SelectBoardList(String title, String memberId, int viewCount,
-                                      LocalDateTime createDate, LocalDateTime updateDate) {
+                                      LocalDateTime createDate, LocalDateTime updateDate, long no, int boardNo, String content) {
         this.title = title;
         this.memberId = memberId;
         this.viewCount = viewCount;
         this.CreateDate = createDate;
         this.UpdateDate = updateDate;
+        this.no = no;
+        this.boardNo = boardNo;
+        this.content = content;
     }
 }
