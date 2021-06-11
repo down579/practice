@@ -25,5 +25,11 @@ public class BoardViewController {
         model.put("no", no);
         return "/board/boardDetail";
     }
+    @RequestMapping(value="/board/{boardNo}/update/{no}", method = RequestMethod.GET)
+    public String showBoardUpdate(@PathVariable int boardNo, @PathVariable long no, Map<String, Object> model) {
+        model.put("boardNo", boardNo);
+        model.put("no", no);
+        return "/board/boardUpdate";
+    }
 
 }

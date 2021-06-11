@@ -10,6 +10,6 @@ import org.springframework.data.domain.Page;
 @Getter
 @Setter
 public class ResponseGetBoardDetailList {
-    public ResponseCommon result;
-    public Page<SelectBoardList> dataList;
+    private ResponseCommon result;
+    private Page<SelectBoardList> dataList;
 }

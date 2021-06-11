@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 
 public interface BoardDetailRepository extends JpaRepository<BoardDetail, Long> {
     @Query(value = "select new my.hydra.practice.models.board.SelectBoardList" +
@@ -29,4 +30,10 @@ public interface BoardDetailRepository extends JpaRepository<BoardDetail, Long> 
     @Transactional
     @Query(value = "delete from BoardDetail b where b.BoardNo =:boardNo and b.No =:no")
     int deleteBoard(int boardNo, long no);
+
+    @Modifying
+    @Transactional
+    @Query(value = "update BoardDetail b Set b.Title = :title, b.Content = :content, b.UpdateDate =:updateDate" +
+            " where b.BoardNo = :boardNo and b.No =:no")
+    int updateBoard(String title, String content, LocalDateTime updateDate, int boardNo, long no);
 }

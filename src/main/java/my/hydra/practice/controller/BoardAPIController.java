@@ -2,10 +2,8 @@ package my.hydra.practice.controller;
 
 import lombok.RequiredArgsConstructor;
 import my.hydra.practice.models.request.RequestPostBoardDetail;
-import my.hydra.practice.models.response.ResponseDeleteBoardDetail;
-import my.hydra.practice.models.response.ResponseGetBoardDetail;
-import my.hydra.practice.models.response.ResponseGetBoardDetailList;
-import my.hydra.practice.models.response.ResponsePostBoardDetail;
+import my.hydra.practice.models.request.RequestPutBoardDetail;
+import my.hydra.practice.models.response.*;
 import my.hydra.practice.service.BoardDetailService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -42,5 +40,10 @@ public class BoardAPIController {
                                                        @PathVariable long no)
     {
         return service.boardDelete(boardNo, no);
+    }
+    @PutMapping("/{boardNo}/{no}")
+    public ResponsePutBoardDetail updateBoardDetail(@PathVariable int boardNo, @PathVariable long no,
+                                  @RequestBody RequestPutBoardDetail detail) {
+        return service.boardUpdate(boardNo, no, detail.getTitle(), detail.getContent());
     }
 }

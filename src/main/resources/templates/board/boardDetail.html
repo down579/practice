@@ -31,6 +31,7 @@
                 최종 수정일 : <div id="updateDate"></div>
                 <input id="btnList" name="btnList" type="button" value="목록" />
                 <input id="btnDelete" name="btnDelete" style="display:none;" type="button" value="삭제"/>
+                <input id="btnUpdate" name="btnUpdate" style="display:none;" type="button" value="수정"/>
             </form>
 
         </div>
@@ -67,6 +68,9 @@
         $('#btnList').on("click", function() {
             location.href = "/board/[[${boardNo}]]/list";
         });
+        $('#btnUpdate').on("click", function() {
+           location.href = "/board/[[${boardNo}]]/update/[[${no}]]";
+        });
     });
     function getDetailSuccess(result) {
         if(result.code == "0000") {
@@ -79,6 +83,7 @@
 
             if(result.registMember) {
                 $('#btnDelete').css('display','block');
+                $('#btnUpdate').css('display','block');
             }
         }
         else {

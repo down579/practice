@@ -7,10 +7,7 @@ import my.hydra.practice.models.ResponseCommon;
 import my.hydra.practice.models.board.SelectBoardList;
 import my.hydra.practice.models.board.SelectBoardNo;
 import my.hydra.practice.models.request.RequestPostBoardDetail;
-import my.hydra.practice.models.response.ResponseDeleteBoardDetail;
-import my.hydra.practice.models.response.ResponseGetBoardDetail;
-import my.hydra.practice.models.response.ResponseGetBoardDetailList;
-import my.hydra.practice.models.response.ResponsePostBoardDetail;
+import my.hydra.practice.models.response.*;
 import my.hydra.practice.repository.BoardCodeRepository;
 import my.hydra.practice.repository.BoardDetailRepository;
 import my.hydra.practice.repository.MemberRepository;
@@ -154,6 +151,23 @@ public class BoardDetailService {
         // 글 작성자가 삭제하는 것인지 확인
         if(detail.getMemberId().equals(userDetails.getUsername())) {
             int resultCount = boardDetailRepository.deleteBoard(boardNo, no);
+            result.setRowCount(resultCount);
+        }
+        else {
+            result.setRowCount(0);
+        }
+        return result;
+    }
+    public ResponsePutBoardDetail boardUpdate(int boardNo, long no, String title, String content) {
+        ResponsePutBoardDetail result = new ResponsePutBoardDetail();
+
+        SelectBoardList detail = boardDetailRepository.getBoardDetailByNo(no);
+
+        UserDetails userDetails = getUserDetails();
+
+        if(detail.getMemberId().equals(userDetails.getUsername())) {
+            int resultCount = boardDetailRepository.updateBoard(title, content,
+                    LocalDateTime.now(), boardNo, no);
             result.setRowCount(resultCount);
         }
         else {
