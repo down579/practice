@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .defaultSuccessUrl("/naver/news") // 로그인 성공 시 이동할 URL
+                .defaultSuccessUrl("/naver/news",true) // 로그인 성공 시 이동할 URL
                 .permitAll()
                 .and()
                 .logout();
