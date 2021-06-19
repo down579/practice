@@ -2,7 +2,7 @@ package my.hydra.practice.service;
 
 import lombok.RequiredArgsConstructor;
 import my.hydra.practice.domains.Member;
-import my.hydra.practice.enums.Role;
+import my.hydra.practice.models.member.MemberRegist;
 import my.hydra.practice.repository.MemberRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,8 +10,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,11 +34,20 @@ public class UserServiceDetailsImpl implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(memberId));
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        if (memberId.equals("hydra12")) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
-        } else {
-            grantedAuthorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
-        }
+        grantedAuthorities.add(new SimpleGrantedAuthority(member.getPermission()));
+//        if (memberId.equals("hydra12")) {
+//            grantedAuthorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
+//        } else {
+//            grantedAuthorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
+//        }
         return new User(member.getMemberId(), member.getPassword(), grantedAuthorities);
+    }
+    public void registMember(MemberRegist regist) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encyptPassword = encoder.encode(regist.getPassword());
+        Member member = new Member(regist.getUsername(), regist.getMembername(), encyptPassword);
+        member.setCreateDate(LocalDateTime.now());
+        member.setPermission("ROLE_MEMBER");
+        memberRepository.save(member);
     }
 }

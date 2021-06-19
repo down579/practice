@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 /**
  * Spring Security 설정 클래스
@@ -31,15 +32,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/member/new").permitAll()
+                .antMatchers("/member/new","/login","/member/signup").permitAll()
                 .antMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
+                .loginPage("/login")
                 .defaultSuccessUrl("/naver/news",true) // 로그인 성공 시 이동할 URL
-                .permitAll()
                 .and()
-                .logout();
+                .logout()
+                .logoutSuccessUrl("/login")
+                .invalidateHttpSession(true);
     }
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -60,7 +63,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/templates/**");
+        web.ignoring().antMatchers("/templates/**", "/css/**","/js/**","/img/**", "/scss/**","/vendor/**");
         //web.ignoring().antMatchers("/api/**");
+    }
+    @Bean
+    public SpringSecurityDialect springSecurityDialect(){
+        return new SpringSecurityDialect();
     }
 }

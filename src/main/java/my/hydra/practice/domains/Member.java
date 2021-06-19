@@ -34,6 +34,9 @@ public class Member {
     @Column(name ="createdate",nullable = false)
     private LocalDateTime createDate;
 
+    @Column(name= "permission", nullable = false)
+    private String permission;
+
     public Member(String memberId, String memberName, String password) {
         this.memberId = memberId;
         this.memberName = memberName;
